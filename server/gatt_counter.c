@@ -225,7 +225,8 @@ static uint16_t att_read_callback(hci_con_handle_t connection_handle, uint16_t a
     }
 
     if (att_handle == ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE){
-        return att_read_callback_handle_blob()
+        uint16_t temp_data = (uint16_t)(temperature_poll() * 100);
+        return att_read_callback_handle_little_endian_16(temp_data, offset, buffer, buffer_size);
     }
     return 0;
 }
