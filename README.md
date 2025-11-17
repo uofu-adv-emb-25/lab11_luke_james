@@ -15,4 +15,6 @@ Therefore, to have the correct value on our service, we had to do some bitmaskin
 `uint16_t top = ((temp_data >> 8) & 0xFF);`
 `temp_data = top | bottom;`
 
+This will swap the top and bottom bytes of temp_data.
+
 Thanks for reading!
