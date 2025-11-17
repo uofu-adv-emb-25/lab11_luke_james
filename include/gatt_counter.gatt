@@ -1,5 +1,5 @@
 PRIMARY_SERVICE, GAP_SERVICE
-CHARACTERISTIC, GAP_DEVICE_NAME, READ, "George Bush"
+CHARACTERISTIC, GAP_DEVICE_NAME, READ, "George Bush",
 
 // add Battery Service
 #import <battery_service.gatt>
