@@ -55,6 +55,7 @@
 #include "gatt_counter.h"
 #include "btstack.h"
 #include "ble/gatt-service/battery_service_server.h"
+#include "temp_sense.h"
 
 #define HEARTBEAT_PERIOD_MS 1000
 
@@ -225,7 +226,17 @@ static uint16_t att_read_callback(hci_con_handle_t connection_handle, uint16_t a
     }
 
     if (att_handle == ATT_CHARACTERISTIC_ORG_BLUETOOTH_CHARACTERISTIC_TEMPERATURE_01_VALUE_HANDLE){
-        uint16_t temp_data = (uint16_t)(temperature_poll() * 100);
+        float temp = temperature_poll();
+        uint16_t temp_data = (uint16_t)(temp * 100);
+
+        uint16_t bottom = (temp_data & 0x00FF) << 8;
+        uint16_t top = ((temp_data >> 8) & 0xFF);
+
+        temp_data = top | bottom;
+    
+
+        printf("Found a raw temp_data value of %f\n", temp);
+        printf("Found a processed temp_data of %d\n", temp_data);
         return att_read_callback_handle_little_endian_16(temp_data, offset, buffer, buffer_size);
     }
     return 0;
@@ -266,6 +277,9 @@ int btstack_main(void);
 int btstack_main(void)
 {
     le_counter_setup();
+
+    // setup temp control
+    temperature_setup();
 
     // turn on!
 	hci_power_control(HCI_POWER_ON);
